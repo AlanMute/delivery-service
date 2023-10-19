@@ -4,8 +4,8 @@ import (
 	"fmt"
 	"time"
 
-	"github.com/KrizzMU/delivery-service/internal/transport/nats/sender"
-	"github.com/KrizzMU/delivery-service/internal/transport/nats/subscriber"
+	"github.com/KrizzMU/delivery-service/internal/transport/ns/sender"
+	"github.com/KrizzMU/delivery-service/internal/transport/ns/subscriber"
 )
 
 func main() {
@@ -15,6 +15,7 @@ func main() {
 	subID := "subs"
 	sendID := "send"
 
+	//repo := repository.NewRepository()
 	sender := sender.NewSender(natsURL, clusterID, sendID)
 	sub := subscriber.NewSub(natsURL, clusterID, subID)
 

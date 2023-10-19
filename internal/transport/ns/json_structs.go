@@ -1,4 +1,4 @@
-package nats
+package ns
 
 type Order struct {
 	OrderUID          string `json:"order_uid"`

@@ -5,15 +5,18 @@ import (
 	"fmt"
 	"log"
 
+	"github.com/KrizzMU/delivery-service/internal/service"
+	"github.com/KrizzMU/delivery-service/internal/transport/ns"
 	"github.com/nats-io/nats.go"
 	"github.com/nats-io/stan.go"
 )
 
 type Subscriber struct {
-	sc stan.Conn
+	sc       stan.Conn
+	services *service.Service
 }
 
-func NewSub(natsURL, clusterID, clientID string) *Subscriber {
+func NewSub(natsURL, clusterID, clientID string, s *service.Service) *Subscriber {
 	nc, err := nats.Connect(natsURL)
 
 	if err != nil {
@@ -29,7 +32,10 @@ func NewSub(natsURL, clusterID, clientID string) *Subscriber {
 		log.Fatalf("Can't connect: %v.\nMake sure a NATS Streaming Server is running at: %s", err, natsURL)
 	}
 
-	return &Subscriber{sc: sc}
+	return &Subscriber{
+		sc:       sc,
+		services: s,
+	}
 }
 
 func (s *Subscriber) SubToChannel(subject string) error {
@@ -47,20 +53,14 @@ func (s *Subscriber) SubToChannel(subject string) error {
 
 func handleOrderMessage(msg []byte) error {
 
-	var orderData map[string]interface{}
+	var orderData ns.Order
 	err := json.Unmarshal(msg, &orderData)
 	if err != nil {
 		fmt.Printf("JSON Error: %v", err)
 		return err
 	}
 
-	jsonData, err := json.MarshalIndent(orderData, "", "  ") // Создаем отформатированную JSON-строку
-	if err != nil {
-		fmt.Printf("Ошибка при маршалинге JSON: %v", err)
-		return err
-	}
-
-	fmt.Println(string(jsonData))
+	//fmt.Println(orderData)
 	fmt.Println()
 	fmt.Println("Прочитал сообщение!")
 	fmt.Println()
