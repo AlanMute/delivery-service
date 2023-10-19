@@ -1,4 +1,4 @@
-package nats
+package subscriber
 
 import (
 	"encoding/json"
@@ -13,7 +13,7 @@ type Subscriber struct {
 	sc stan.Conn
 }
 
-func NewSub(natsURL, clusterID, clientID, subject string) *Subscriber {
+func NewSub(natsURL, clusterID, clientID string) *Subscriber {
 	nc, err := nats.Connect(natsURL)
 
 	if err != nil {
@@ -35,7 +35,8 @@ func NewSub(natsURL, clusterID, clientID, subject string) *Subscriber {
 func (s *Subscriber) SubToChannel(subject string) error {
 	_, err := s.sc.Subscribe(subject, func(msg *stan.Msg) {
 		handleOrderMessage(msg.Data)
-	})
+		msg.Ack()
+	}, stan.DeliverAllAvailable(), stan.DurableName("dur"))
 
 	if err != nil {
 		return err
@@ -45,20 +46,24 @@ func (s *Subscriber) SubToChannel(subject string) error {
 }
 
 func handleOrderMessage(msg []byte) error {
+
 	var orderData map[string]interface{}
 	err := json.Unmarshal(msg, &orderData)
 	if err != nil {
-		log.Printf("JSON Error: %v", err)
+		fmt.Printf("JSON Error: %v", err)
 		return err
 	}
 
 	jsonData, err := json.MarshalIndent(orderData, "", "  ") // Создаем отформатированную JSON-строку
 	if err != nil {
-		log.Printf("Ошибка при маршалинге JSON: %v", err)
+		fmt.Printf("Ошибка при маршалинге JSON: %v", err)
 		return err
 	}
 
 	fmt.Println(string(jsonData))
+	fmt.Println()
+	fmt.Println("Прочитал сообщение!")
+	fmt.Println()
 
 	return nil
 }
