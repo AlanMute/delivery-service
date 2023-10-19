@@ -3,16 +3,30 @@ package service
 import (
 	"github.com/KrizzMU/delivery-service/internal/core"
 	"github.com/KrizzMU/delivery-service/internal/repository"
+	"github.com/KrizzMU/delivery-service/pkg/cache"
 )
 
 type OrderService struct {
-	r *repository.Order
+	repo repository.Order
+	c    cache.Cache
 }
 
-func NewOrderService(repo *repository.Order) *OrderService {
-	return &OrderService{r: repo}
+func NewOrderService(r repository.Order) *OrderService {
+	return &OrderService{
+		repo: r,
+		c:    *cache.NewCache(),
+	}
 }
 
-func (*OrderService) Create(ord core.Order) error {
+func (s *OrderService) Create(ord core.Order) error {
+
+	err := s.repo.Add(ord)
+
+	if err != nil {
+		return err
+	}
+
+	s.c.Add(ord.OrderUID, ord)
+
 	return nil
 }
