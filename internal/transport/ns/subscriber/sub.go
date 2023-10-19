@@ -5,8 +5,9 @@ import (
 	"fmt"
 	"log"
 
+	"github.com/KrizzMU/delivery-service/internal/core"
+
 	"github.com/KrizzMU/delivery-service/internal/service"
-	"github.com/KrizzMU/delivery-service/internal/transport/ns"
 	"github.com/nats-io/nats.go"
 	"github.com/nats-io/stan.go"
 )
@@ -40,7 +41,7 @@ func NewSub(natsURL, clusterID, clientID string, s *service.Service) *Subscriber
 
 func (s *Subscriber) SubToChannel(subject string) error {
 	_, err := s.sc.Subscribe(subject, func(msg *stan.Msg) {
-		handleOrderMessage(msg.Data)
+		s.handleOrderMessage(msg.Data)
 		msg.Ack()
 	}, stan.DeliverAllAvailable(), stan.DurableName("dur"))
 
@@ -51,19 +52,22 @@ func (s *Subscriber) SubToChannel(subject string) error {
 	return nil
 }
 
-func handleOrderMessage(msg []byte) error {
+func (s *Subscriber) handleOrderMessage(msg []byte) error {
 
-	var orderData ns.Order
+	var orderData core.Order
 	err := json.Unmarshal(msg, &orderData)
 	if err != nil {
 		fmt.Printf("JSON Error: %v", err)
 		return err
 	}
 
-	//fmt.Println(orderData)
 	fmt.Println()
 	fmt.Println("Прочитал сообщение!")
 	fmt.Println()
+
+	if err := s.services.Order.Create(orderData); err != nil {
+		fmt.Printf("Created Error: %v", err)
+	}
 
 	return nil
 }

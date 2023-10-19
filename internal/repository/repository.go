@@ -1,8 +1,12 @@
 package repository
 
-import "github.com/jinzhu/gorm"
+import (
+	"github.com/KrizzMU/delivery-service/internal/core"
+	"github.com/jinzhu/gorm"
+)
 
 type Order interface {
+	Add(ord core.Order) error
 }
 
 type Repository struct {

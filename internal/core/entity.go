@@ -1,7 +1,7 @@
-package ns
+package core
 
 type Order struct {
-	OrderUID          string `json:"order_uid"`
+	OrderUID          string `json:"order_uid" gorm:"primaryKey"`
 	TrackNumber       string `json:"track_number"`
 	Entry             string `json:"entry"`
 	Delivery          Delivery
@@ -18,6 +18,7 @@ type Order struct {
 }
 
 type Delivery struct {
+	ID      uint `gorm:"primaryKey" json:"-"`
 	Name    string
 	Phone   string
 	Zip     string
@@ -28,7 +29,7 @@ type Delivery struct {
 }
 
 type Payment struct {
-	Transaction  string
+	Transaction  string `gorm:"primaryKey"`
 	RequestID    string `json:"request_id"`
 	Currency     string
 	Provider     string
@@ -41,7 +42,7 @@ type Payment struct {
 }
 
 type Item struct {
-	ChrtID      int    `json:"chrt_id"`
+	ChrtID      int    `json:"chrt_id" gorm:"primaryKey"`
 	TrackNumber string `json:"track_number"`
 	Price       int
 	RID         string `json:"rid"`
