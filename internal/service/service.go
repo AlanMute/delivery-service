@@ -9,6 +9,7 @@ import (
 type Order interface {
 	Create(ord core.Order) error
 	RecoveryCache(ords []core.Order)
+	Get(id string) (core.Order, error)
 }
 
 type Service struct {
