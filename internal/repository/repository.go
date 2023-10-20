@@ -7,6 +7,7 @@ import (
 
 type Order interface {
 	Add(ord core.Order) error
+	GetAll() []core.Order
 }
 
 type Repository struct {

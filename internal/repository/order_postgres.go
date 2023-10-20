@@ -42,3 +42,15 @@ func (r *OrderPostgres) Add(ord core.Order) error {
 
 	return nil
 }
+
+func (r *OrderPostgres) GetAll() []core.Order {
+	var orders []core.Order
+
+	r.db.Preload("Delivery").Preload("Payment").Find(&orders)
+
+	for i := range orders {
+		r.db.Where("track_number = ?", orders[i].TrackNumber).Find(&orders[i].Items)
+	}
+
+	return orders
+}

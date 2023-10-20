@@ -1,9 +1,7 @@
 package sender
 
 import (
-	"fmt"
 	"log"
-	"os"
 
 	//ns "github.com/KrizzMU/delivery-service/internal/transport/nats"
 	"github.com/nats-io/nats.go"
@@ -36,15 +34,15 @@ func NewSender(natsURL, clusterID, clientID string) *Sender {
 func (s *Sender) SendFake(subject string) {
 	//fakedate := ns.Order{}
 
-	jsonData, err := os.ReadFile("./model.json")
-	if err != nil {
-		log.Fatal(err.Error())
-	}
+	// jsonData, err := os.ReadFile("./model.json")
+	// if err != nil {
+	// 	log.Fatal(err.Error())
+	// }
 
-	for i := 0; i < 3; i++ {
-		err = s.sc.Publish(subject, jsonData)
-		fmt.Println("Json Sended", i)
-		//time.Sleep(time.Second * 3)
-	}
+	// for i := 0; i < 3; i++ {
+	// 	err = s.sc.Publish(subject, jsonData)
+	// 	fmt.Println("Json Sended", i)
+	// 	//time.Sleep(time.Second * 3)
+	// }
 
 }
