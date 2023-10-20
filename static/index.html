@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="style.css">
+    <title>Информация о заказе</title>
+</head>
+<body>
+    <h1>Информация о заказе</h1>
+    <label for="orderIndex">Индекс заказа:</label>
+    <input type="text" id="orderIndex" placeholder="Введите индекс заказа">
+    <button onclick="findOrder()">Найти заказ</button>
+    <div id="orderInfo"></div>
+    <script>
+        function findOrder() {
+        const orderIndex = document.getElementById("orderIndex").value;
+        
+        fetch(`/order/${orderIndex}`)
+            .then(response => response.json())
+            .then(orderData => displayOrderInfo(orderData))
+            .catch(error => {
+                console.error(error);
+                displayOrderInfo(null);
+            });
+    }
+    function displayOrderInfo(orderData) {
+    const orderInfo = document.getElementById("orderInfo");
+    orderInfo.innerHTML = "";
+    if (orderData) {
+        for (const key in orderData) {
+            if (key == "Items") {
+                orderInfo.innerHTML += `<h2>${key}</h2>`;
+                
+                orderData[key].forEach(item => {
+                    orderInfo.innerHTML += `<ul>`;
+                    for (const itemKey in item) {
+                        orderInfo.innerHTML += `<li>${itemKey}: ${item[itemKey]}</li>`;
+                    }
+                    orderInfo.innerHTML += `</ul>`;                   
+                });                
+            } else if (typeof orderData[key] === "object") {
+                orderInfo.innerHTML += `<h2>${key}</h2>`;
+                for (const subKey in orderData[key]) {
+                    orderInfo.innerHTML += `<p>${subKey}: ${orderData[key][subKey]}</p>`;
+                }       
+            } else {
+                orderInfo.innerHTML += `<p>${key}: ${orderData[key]}</p>`;
+            }
+        }
+    } else {
+        orderInfo.innerHTML = "<p>Заказ не найден</p>";
+    }
+}
+    </script>
+</body>
+</html>

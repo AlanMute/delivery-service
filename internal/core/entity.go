@@ -1,11 +1,13 @@
 package core
 
 type Order struct {
-	OrderUID          string `gorm:"primary_key" json:"order_uid"`
-	TrackNumber       string `json:"track_number"`
-	Entry             string `json:"entry"`
-	DeliveryID        uint   `json:"-"`
-	PaymentID         uint   `json:"-"`
+	OrderUID          string   `gorm:"primary_key" json:"order_uid"`
+	TrackNumber       string   `json:"track_number"`
+	Entry             string   `json:"entry"`
+	DeliveryID        uint     `json:"-"`
+	PaymentID         uint     `json:"-"`
+	Delivery          Delivery `gorm:"foreignKey:DeliveryID"`
+	Payment           Payment  `gorm:"foreignKey:PaymentID"`
 	Items             []Item
 	Locale            string `json:"locale"`
 	InternalSignature string `json:"internal_signature"`
@@ -15,9 +17,6 @@ type Order struct {
 	SMID              int    `json:"sm_id"`
 	DateCreated       string `json:"date_created"`
 	OOFShard          string `json:"oof_shard"`
-
-	Delivery Delivery `gorm:"foreignKey:DeliveryID"`
-	Payment  Payment  `gorm:"foreignKey:PaymentID"`
 }
 
 type Delivery struct {
