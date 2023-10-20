@@ -14,23 +14,19 @@ func NewOrderPostgres(pd *gorm.DB) *OrderPostgres {
 }
 
 func (r *OrderPostgres) Add(ord core.Order) error {
-	delivery := ord.Delivery
-	payment := ord.Payment
-	items := ord.Items
-
 	tx := r.db.Begin()
 
-	if err := tx.Create(&delivery).Error; err != nil {
+	if err := tx.Create(&ord.Delivery).Error; err != nil {
 		tx.Rollback()
 		return err
 	}
 
-	if err := tx.Create(&payment).Error; err != nil {
+	if err := tx.Create(&ord.Payment).Error; err != nil {
 		tx.Rollback()
 		return err
 	}
 
-	for _, item := range items {
+	for _, item := range ord.Items {
 		if err := tx.Create(&item).Error; err != nil {
 			tx.Rollback()
 			return err

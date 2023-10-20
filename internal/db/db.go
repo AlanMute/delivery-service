@@ -12,10 +12,13 @@ func GetConnection() *gorm.DB {
 		panic(err)
 	}
 
-	db.AutoMigrate(&core.Order{})
 	db.AutoMigrate(&core.Delivery{})
 	db.AutoMigrate(&core.Payment{})
 	db.AutoMigrate(&core.Item{})
+
+	db.AutoMigrate(&core.Order{})
+	db.Model(&core.Order{}).AddForeignKey("delivery_id", "deliveries(id)", "CASCADE", "CASCADE")
+	db.Model(&core.Order{}).AddForeignKey("payment_id", "payments(id)", "CASCADE", "CASCADE")
 
 	return db
 }
