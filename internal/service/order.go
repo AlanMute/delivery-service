@@ -24,8 +24,8 @@ func NewOrderService(r repository.Order, c *cache.Cache) *OrderService {
 func (s *OrderService) RecoveryCache(ords []core.Order) {
 	for _, ord := range ords {
 		s.c.Add(ord.OrderUID, ord)
-		fmt.Println("Востановлено")
-		fmt.Println(s.c.Get("b563feb7b2b84b6test"))
+		fmt.Println("Востановлен ", ord.OrderUID)
+		//fmt.Println(s.c.Get(ord.OrderUID))
 		fmt.Println()
 	}
 }
@@ -39,7 +39,7 @@ func (s *OrderService) Create(ord core.Order) error {
 	}
 
 	s.c.Add(ord.OrderUID, ord)
-	fmt.Println(s.c.Get("b563feb7b2b84b6test"))
+	//fmt.Println(s.c.Get(ord.OrderUID))
 	return nil
 }
 

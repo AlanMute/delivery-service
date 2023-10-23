@@ -1,9 +1,13 @@
 package sender
 
 import (
+	"encoding/json"
+	"fmt"
 	"log"
+	"time"
 
-	//ns "github.com/KrizzMU/delivery-service/internal/transport/nats"
+	"github.com/KrizzMU/delivery-service/internal/core"
+	"github.com/go-faker/faker/v4"
 	"github.com/nats-io/nats.go"
 	"github.com/nats-io/stan.go"
 )
@@ -32,17 +36,31 @@ func NewSender(natsURL, clusterID, clientID string) *Sender {
 }
 
 func (s *Sender) SendFake(subject string) {
-	//fakedate := ns.Order{}
+	for {
+		var order core.Order
+		fakedate := faker.FakeData(&order)
+		if fakedate != nil {
+			fmt.Println(fakedate)
+			continue
+		}
 
-	// jsonData, err := os.ReadFile("./model.json")
-	// if err != nil {
-	// 	log.Fatal(err.Error())
-	// }
+		order.Payment.Transaction = order.OrderUID
+		if len(order.Items) > 3 {
+			order.Items = order.Items[:3]
+		}
+		for i := 0; i < len(order.Items); i++ {
+			order.Items[i].TrackNumber = order.TrackNumber
+		}
 
-	// for i := 0; i < 3; i++ {
-	// 	err = s.sc.Publish(subject, jsonData)
-	// 	fmt.Println("Json Sended", i)
-	// 	//time.Sleep(time.Second * 3)
-	// }
+		fmt.Println("Sended Order: OrderUID = ", order.OrderUID)
 
+		jsondata, err := json.Marshal(order)
+		if err != nil {
+			fmt.Println(err)
+			continue
+		}
+		s.sc.Publish(subject, jsondata)
+
+		time.Sleep(time.Second * 60)
+	}
 }
