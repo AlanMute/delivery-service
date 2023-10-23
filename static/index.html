@@ -24,6 +24,7 @@
                 displayOrderInfo(null);
             });
     }
+
     function displayOrderInfo(orderData) {
     const orderInfo = document.getElementById("orderInfo");
     orderInfo.innerHTML = "";
@@ -32,18 +33,25 @@
             if (key == "Items") {
                 orderInfo.innerHTML += `<h2>${key}</h2>`;
                 
-                orderData[key].forEach(item => {
-                    orderInfo.innerHTML += `<ul>`;
+                const itemsHtml = orderData[key].map(item => {
+                    let itemHtml = '<div class="item">';
                     for (const itemKey in item) {
-                        orderInfo.innerHTML += `<li>${itemKey}: ${item[itemKey]}</li>`;
+                        itemHtml += `<p>${itemKey}: ${item[itemKey]}</p>`;
                     }
-                    orderInfo.innerHTML += `</ul>`;                   
-                });                
+                    itemHtml += '</div>';
+                    return itemHtml;
+                });
+
+                orderInfo.innerHTML += itemsHtml.join(''); // Объединить HTML всех предметов
             } else if (typeof orderData[key] === "object") {
                 orderInfo.innerHTML += `<h2>${key}</h2>`;
+                let itemHtml = '<div class="item">'
                 for (const subKey in orderData[key]) {
-                    orderInfo.innerHTML += `<p>${subKey}: ${orderData[key][subKey]}</p>`;
+                    itemHtml += `<p>${subKey}: ${orderData[key][subKey]}</p>`;
+                    //orderInfo.innerHTML += `<p>${subKey}: ${orderData[key][subKey]}</p>`;
                 }       
+                itemHtml += '</div>';
+                orderInfo.innerHTML += itemHtml;
             } else {
                 orderInfo.innerHTML += `<p>${key}: ${orderData[key]}</p>`;
             }

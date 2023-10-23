@@ -22,7 +22,9 @@ func main() {
 	subID := "subs"
 	sendID := "send"
 
-	s := new(rest.Server)
+	sender := sender.NewSender(natsURL, clusterID, sendID)
+	fmt.Println("Started sending to channel")
+	go sender.SendFake(channel)
 
 	if err := godotenv.Load(); err != nil {
 		panic(err)
@@ -34,13 +36,12 @@ func main() {
 	go services.Order.RecoveryCache(repo.Order.GetAll())
 	handler := handlers.NewHandler(services)
 
-	sender := sender.NewSender(natsURL, clusterID, sendID)
 	sub := subscriber.NewSub(natsURL, clusterID, subID, services)
-
-	go sender.SendFake(channel)
 
 	fmt.Println("Started listening to the channel")
 	go sub.SubToChannel(channel)
+
+	s := new(rest.Server)
 
 	if err := s.Run("8088", handler.InitRoutes()); err != nil {
 		log.Fatal("ERROR start Server!")

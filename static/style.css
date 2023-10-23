@@ -1,74 +1,72 @@
 body {
-    font-family: Arial, sans-serif;
-    background-color: #f0f0f0;
-    text-align: center;
-    margin: 0;
-    padding: 0;
-  }
-  
-  /* Заголовок страницы */
-  h1 {
-    background-color: #333;
-    color: #fff;
-    padding: 20px;
-    margin: 0;
-  }
-  
-  /* Стили для контейнера с индексом заказа и кнопкой */
-  label, input, button {
-    display: block;
-    margin: 10px auto;
-    width: 300px;
-  }
-  
-  input {
-    padding: 10px;
-    border: 2px solid #333;
-    border-radius: 5px;
-  }
-  
-  button {
-    background-color: #007BFF;
-    color: #fff;
-    padding: 10px 20px;
-    border: none;
-    border-radius: 5px;
-    cursor: pointer;
-    transition: background-color 0.3s ease;
-  }
-  
-  button:hover {
-    background-color: #4207cc;
-  }
-  
-  /* Стили для блока с информацией о заказе */
-  #orderInfo {
-    background-color: #fff;
-    border: 2px solid #ddd;
-    border-radius: 5px;
-    padding: 20px;
-    margin: 20px auto;
-    max-width: 600px;
-  }
-  
-  #orderInfo h2 {
-    margin-top: 20px;
-    font-size: 24px;
-    color: #333;
-  }
-  
-  ul {
-    list-style: none;
-    padding: 0;
-  }
-  
-  li {
-    margin-left: 200px;
-    margin-bottom: 10px;
-    text-align: left;
-  }
-  
-  /* Стили для текста об ошибке */
-  #errorMessage {
-    color: #ff0000;
-  }
+  font-family: 'Arial', sans-serif;
+  background-color: #f4f4f4;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: 100vh;
+}
+
+.container {
+  max-width: 600px;
+  background-color: #fff;
+  border-radius: 10px;
+  box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
+  padding: 20px;
+  text-align: center;
+}
+
+h1 {
+  color: #333;
+}
+
+label {
+  font-weight: bold;
+}
+
+input[type="text"] {
+  padding: 10px;
+  width: 300px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  margin: 10px 0;
+}
+
+button {
+  padding: 10px 20px;
+  background-color: #007bff;
+  color: #fff;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+button:hover {
+  background-color: #0056b3;
+}
+
+/* Стили для блока с информацией о заказе */
+#orderInfo {
+  margin-top: 20px;
+}
+
+.item {
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  padding: 10px;
+  background-color: #fff;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+  margin: 10px 0;
+}
+
+.item p {
+  margin: 5px 0;
+}
+
+h2 {
+  font-size: 18px;
+  margin: 15px 0;
+}
