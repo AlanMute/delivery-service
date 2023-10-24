@@ -12,7 +12,9 @@ func (h *Handler) GetById(c *gin.Context) {
 	order, err := h.services.Order.Get(orderID)
 
 	if err != nil {
-		c.AbortWithStatusJSON(http.StatusOK, gin.H{"error": err.Error()})
+		c.AbortWithStatusJSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+
+		return
 	}
 	//fmt.Println(order)
 	c.JSON(http.StatusOK, order)
