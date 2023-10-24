@@ -6,6 +6,8 @@ import (
 	"github.com/KrizzMU/delivery-service/pkg/cache"
 )
 
+//go:generate mockgen -source=service.go -destination=mocks/mock.go
+
 type Order interface {
 	Create(ord core.Order) error
 	RecoveryCache(ords []core.Order)
