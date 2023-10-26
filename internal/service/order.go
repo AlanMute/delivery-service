@@ -11,10 +11,10 @@ import (
 
 type OrderService struct {
 	repo repository.Order
-	c    *cache.Cache
+	c    cache.ICache
 }
 
-func NewOrderService(r repository.Order, c *cache.Cache) *OrderService {
+func NewOrderService(r repository.Order, c cache.ICache) *OrderService {
 	return &OrderService{
 		repo: r,
 		c:    c,
@@ -25,7 +25,6 @@ func (s *OrderService) RecoveryCache(ords []core.Order) {
 	for _, ord := range ords {
 		s.c.Add(ord.OrderUID, ord)
 		fmt.Println("Востановлен ", ord.OrderUID)
-		//fmt.Println(s.c.Get(ord.OrderUID))
 		fmt.Println()
 	}
 }
@@ -39,7 +38,7 @@ func (s *OrderService) Create(ord core.Order) error {
 	}
 
 	s.c.Add(ord.OrderUID, ord)
-	//fmt.Println(s.c.Get(ord.OrderUID))
+
 	return nil
 }
 

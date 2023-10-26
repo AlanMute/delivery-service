@@ -2,6 +2,11 @@ package cache
 
 import "sync"
 
+type ICache interface {
+	Add(key string, data interface{})
+	Get(key string) (interface{}, bool)
+}
+
 type Cache struct {
 	data map[string]interface{}
 	mu   sync.RWMutex

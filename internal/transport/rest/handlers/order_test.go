@@ -1,7 +1,6 @@
 package handlers
 
 import (
-	"bytes"
 	"errors"
 	"net/http/httptest"
 	"testing"
@@ -63,7 +62,7 @@ func TestHandler_GetById(t *testing.T) {
 			r.Handle("GET", "/order/:id", handler.GetById)
 
 			w := httptest.NewRecorder()
-			req := httptest.NewRequest("GET", "/order/"+test.param, bytes.NewBufferString(`{}`))
+			req := httptest.NewRequest("GET", "/order/"+test.param, nil)
 
 			r.ServeHTTP(w, req)
 
