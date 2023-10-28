@@ -61,6 +61,6 @@ func (s *Sender) SendFake(subject string) {
 		}
 		s.sc.Publish(subject, jsondata)
 
-		time.Sleep(time.Second * 120)
+		time.Sleep(time.Second * 60)
 	}
 }

@@ -42,13 +42,12 @@
                     return itemHtml;
                 });
 
-                orderInfo.innerHTML += itemsHtml.join(''); // Объединить HTML всех предметов
+                orderInfo.innerHTML += itemsHtml.join(''); 
             } else if (typeof orderData[key] === "object") {
                 orderInfo.innerHTML += `<h2>${key}</h2>`;
                 let itemHtml = '<div class="item">'
                 for (const subKey in orderData[key]) {
                     itemHtml += `<p>${subKey}: ${orderData[key][subKey]}</p>`;
-                    //orderInfo.innerHTML += `<p>${subKey}: ${orderData[key][subKey]}</p>`;
                 }       
                 itemHtml += '</div>';
                 orderInfo.innerHTML += itemHtml;
